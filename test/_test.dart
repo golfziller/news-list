@@ -43,6 +43,25 @@ void main() {
       expect(result, false);
     });
   });
+  group('check Sum Zero', () {
+    test('ex1', () {
+      final result = findSumNumberZero([-1, -5, -3, 0, 1, 2, -1]);
+      expect(result, [
+        [-3, 1, 2],
+        [-1, -1, 2],
+        [-1, 0, 1]
+      ]);
+    });
+    test('ex2', () {
+      final result = findSumNumberZero([1, 1, 2]);
+      expect(result, []);
+    });
+    test('ex3', () {
+      final result = findSumNumberZero([1]);
+      expect(result, []);
+    });
+  });
+
   // testWidgets('Counter increments smoke test', (WidgetTester tester) async {
   //   // Build our app and trigger a frame.
   //   await tester.pumpWidget(const MyApp());

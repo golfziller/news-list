@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+
 logic1(List<int> arr) {
   int totalSum = arr.fold(0, (a, b) => a + b);
   int leftSum = 0;
@@ -19,4 +21,37 @@ bool checkPalindrome(String data) {
   return defaultText == textReverse;
 }
 
-findSumNumberZero(List<int> nums) {}
+List<List<int>> findSumNumberZero(List<int> nums) {
+  nums.sort();
+  late List<List<int>> result = [];
+  /**pre check for performance */
+  if (nums.length < 3) return result;
+
+  for (var i = 0; i < nums.length; i++) {
+    late int? nextItem;
+    final currentItem = nums[i];
+    final skipArray = nums.skip(i + 1).toList();
+    if (skipArray.length >= 2) {
+      for (var i2 = 0; i2 < skipArray.length; i2++) {
+        nextItem = skipArray[i2];
+        final sumTwo = currentItem + nextItem;
+        final skipArray2 = skipArray.skip(i2 + 1);
+        final res = skipArray2.where((element) => element == (0 - sumTwo));
+        for (var e in res) {
+          final addData = [currentItem, nextItem, e];
+          final findDup =
+              result.firstWhereOrNull((ck) => ck.join() == addData.join());
+          if (findDup == null) {
+            result = [
+              ...result,
+              [currentItem, nextItem, e]
+            ];
+          }
+        }
+      }
+    } else {
+      break;
+    }
+  }
+  return result;
+}
