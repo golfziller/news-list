@@ -18,9 +18,9 @@ class NetworkService {
       dio.interceptors.add(
         PrettyDioLogger(
           requestHeader: true,
-          requestBody: true,
-          responseBody: true,
-          responseHeader: true,
+          requestBody: false, // true,
+          responseBody: false, // true,
+          responseHeader: false, //true,
           error: true,
           compact: true,
           maxWidth: 90,
@@ -48,10 +48,16 @@ class NetworkService {
       );
 
   Future<Response> get(String url, {Map<String, dynamic>? query}) async {
-    final r = await dio.get(url, queryParameters: {
-      ...query ?? {},
-      'apiKey': '7d635b11b2094bec87104c167922ea1e'
-    });
-    return r;
+    try {
+      final r = await dio.get(url, queryParameters: {
+        ...query ?? {},
+        'apiKey': '7d635b11b2094bec87104c167922ea1e'
+      });
+      return r;
+    } on DioException catch (e) {
+      throw Exception(e);
+    } on Exception catch (e) {
+      throw Exception('Something went wrong');
+    }
   }
 }

@@ -90,6 +90,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:list_news/cubits/news/news_cubit.dart';
+import 'package:list_news/data/models/news_response.dart';
 import 'package:list_news/data/network/api_service.dart';
 import 'package:list_news/repository/news_repo.dart';
 import 'package:list_news/routes/page_name.dart';
@@ -104,7 +105,7 @@ class AppModule extends Module {
     i.addSingleton(NetworkService.new);
     i.addLazySingleton(NewsRepository.new);
 
-    i.add(NewsCubit.new);
+    i.addSingleton(NewsCubit.new);
   }
 
   @override
@@ -118,7 +119,13 @@ class AppModule extends Module {
     );
     r.child(
       PageName.newsDetail,
-      child: (context) => NewsDetailScreen(),
+      transition: TransitionType.rightToLeftWithFade,
+      child: (context) {
+        final arg = r.args.data as Article;
+        return NewsDetailScreen(
+          article: arg,
+        );
+      },
     );
   }
 }

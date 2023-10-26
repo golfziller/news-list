@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'My Smart App',
+      title: 'News List App',
       theme: AppTheme.themeData(),
       routerConfig: Modular.routerConfig,
     );

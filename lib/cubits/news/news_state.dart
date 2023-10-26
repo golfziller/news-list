@@ -1,22 +1,21 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:equatable/equatable.dart';
+import 'package:list_news/data/models/news_response.dart';
 
+part 'news_state.freezed.dart';
 part 'news_state.g.dart';
 
-@JsonSerializable()
-class Newstate extends Equatable {
-  final String firstName;
-  final String lastName;
-  final DateTime? dateOfBirth;
+@freezed
+class Newstate with _$Newstate {
+  const factory Newstate({
+    @Default(false) bool isLoading,
+    @Default(0) int totalResults,
+    @Default('') String textSearch,
+    List<Article>? articles,
+    @Default(1) int page,
+    @Default(false) isFetchError,
+  }) = _Newstate;
 
-  @override
-  List<Object> get props => [firstName, lastName];
-  Newstate({
-    this.firstName = '',
-    this.lastName = '',
-    this.dateOfBirth,
-  });
-  factory Newstate.fromJson(Map<String, dynamic> json) =>
+  factory Newstate.fromJson(Map<String, Object?> json) =>
       _$NewstateFromJson(json);
-  Map<String, dynamic> toJson() => _$NewstateToJson(this);
 }

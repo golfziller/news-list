@@ -42,7 +42,7 @@ class ScreenWrapper extends StatelessWidget {
                         },
                         child: const Icon(
                           Icons.arrow_back_ios,
-                          color: AppColors.kDarkGreen,
+                          color: AppColors.kWhite,
                           size: 24.0,
                         ),
                       )

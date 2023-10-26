@@ -8,13 +8,16 @@ class NewsRepository {
   NewsRepository(this.apiClient);
   static const String endpoint = 'top-headlines';
 
-  getNewsList() async {
+  getNewsList({limit = 10, country = 'us', page = 1, search = ''}) async {
     try {
-      final response =
-          await apiClient.get(endpoint, query: {'country': 'us', 'page': '2'});
+      final response = await apiClient.get(endpoint, query: {
+        'country': country,
+        'page': page,
+        'pageSize': limit,
+        'q': search
+      });
       return response.data;
     } catch (e) {
-      print('xxxxx => $e');
       return null;
     }
   }
