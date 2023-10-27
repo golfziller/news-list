@@ -1,19 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:intl/intl.dart';
 import 'package:list_news/components/screen_wrapper.dart';
 import 'package:list_news/components/text_feild_custom.dart';
 import 'package:list_news/cubits/news/news_cubit.dart';
 import 'package:list_news/cubits/news/news_state.dart';
-import 'package:list_news/routes/page_name.dart';
 import 'package:list_news/theme/colors.dart';
 import 'package:list_news/views/news/widget/fetch_error.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:list_news/views/news/widget/item_card.dart';
+import 'package:list_news/views/news/widget/search_not_found.dart';
 
 class NewsListScreen extends StatefulWidget {
   const NewsListScreen({super.key});
@@ -93,95 +90,13 @@ class _NewsListScreenState extends State<NewsListScreen> {
                     ),
                     Expanded(
                       child: state.articles!.isEmpty
-                          ? Center(
-                              child: Text(
-                                'Not found',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(
-                                      color: AppColors.kDarkGreen,
-                                    ),
-                              ),
-                            )
+                          ? const SearchNotFound()
                           : ListView.builder(
                               controller: controller,
                               itemCount: state.articles?.length,
                               itemBuilder: (context, index) {
                                 final item = state.articles![index];
-                                return GestureDetector(
-                                  onTap: () {
-                                    FocusManager.instance.primaryFocus!
-                                        .unfocus();
-                                    Modular.to.pushNamed(PageName.newsDetail,
-                                        arguments: item);
-                                  },
-                                  child: Card(
-                                    elevation: 20,
-                                    color: Colors.white,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10),
-                                      child: Column(
-                                        children: [
-                                          if (item.urlToImage != null)
-                                            SizedBox(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              child: FadeInImage.memoryNetwork(
-                                                placeholder: kTransparentImage,
-                                                image: item.urlToImage!,
-                                                fit: BoxFit.cover,
-                                                height: 250.0,
-                                              ),
-                                            ),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            item.title,
-                                            maxLines: 1,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge!
-                                                .copyWith(
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  color: AppColors.kDarkGreen,
-                                                ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 10),
-                                            child: Text(
-                                              item.description ?? '',
-                                              maxLines: 5,
-                                              textAlign: TextAlign.center,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyMedium!
-                                                  .copyWith(
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                            ),
-                                          ),
-                                          if (item.publishedAt != null)
-                                            Text(
-                                              'Update At: ${DateFormat('MMM dd yyyy').format(item.publishedAt!.toLocal())}',
-                                              textAlign: TextAlign.center,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall!
-                                                  .copyWith(
-                                                      color:
-                                                          AppColors.kGraySmoke),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
+                                return ItemCard(item: item);
                               },
                             ),
                     )

@@ -36,15 +36,16 @@ List<List<int>> findSumNumberZero(List<int> nums) {
         nextItem = skipArray[i2];
         final sumTwo = currentItem + nextItem;
         final skipArray2 = skipArray.skip(i2 + 1);
-        final res = skipArray2.where((element) => element == (0 - sumTwo));
-        for (var e in res) {
-          final addData = [currentItem, nextItem, e];
+        final findLastIndex =
+            skipArray2.firstWhereOrNull((element) => element == (0 - sumTwo));
+        if (findLastIndex != null) {
+          final addData = [currentItem, nextItem, findLastIndex];
           final findDup =
               result.firstWhereOrNull((ck) => ck.join() == addData.join());
           if (findDup == null) {
             result = [
               ...result,
-              [currentItem, nextItem, e]
+              [currentItem, nextItem, findLastIndex]
             ];
           }
         }

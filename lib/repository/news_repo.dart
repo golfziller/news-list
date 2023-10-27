@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:list_news/data/network/api_service.dart';
 
 class NewsRepository {

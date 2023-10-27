@@ -1,10 +1,10 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-// final dio = Dio();
 class NetworkService {
-  // final Dio dio;
   final dio = Dio();
   NetworkService() {
     dio.options.baseUrl = 'https://newsapi.org/v2/';
@@ -34,7 +34,6 @@ class NetworkService {
           options.headers['Content-Type'] = 'application/json';
           options.headers['Accept'] = 'application/json';
           options.headers['Accept-Language'] = 'en';
-
           return handler.next(options);
         },
       );
@@ -47,17 +46,37 @@ class NetworkService {
         },
       );
 
-  Future<Response> get(String url, {Map<String, dynamic>? query}) async {
+  Future<Response> _createOperation(
+    String path, {
+    required String method,
+    data,
+    headers,
+    Map<String, dynamic>? queryParameters,
+  }) async {
     try {
-      final r = await dio.get(url, queryParameters: {
+      Response result = await dio.request(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: Options(method: method, headers: headers),
+      );
+      return result;
+    } on SocketException catch (e) {
+      throw Exception('No Internet Connection');
+    } on DioException catch (e) {
+      throw Exception('Some thing went wrong');
+    }
+  }
+
+  Future<Response> get(String url, {Map<String, dynamic>? query}) async {
+    final r = await _createOperation(
+      url,
+      method: 'get',
+      queryParameters: {
         ...query ?? {},
         'apiKey': '7d635b11b2094bec87104c167922ea1e'
-      });
-      return r;
-    } on DioException catch (e) {
-      throw Exception(e);
-    } on Exception catch (e) {
-      throw Exception('Something went wrong');
-    }
+      },
+    );
+    return r;
   }
 }
